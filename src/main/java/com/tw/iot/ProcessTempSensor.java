@@ -68,12 +68,6 @@ public class ProcessTempSensor {
                         .withBucketAssigner(new DateTimeBucketAssigner<>())
                         .build();
 
-        StreamingFileSink<String> avgTempSink =
-                StreamingFileSink.forRowFormat(new Path("output/temp/avg"),
-                        new SimpleStringEncoder<String>("UTF-8"))
-                        .withBucketAssigner(new DateTimeBucketAssigner<>())
-                        .build();
-
         avgTempSensorStream
                 .map(new MapTempSensorResult())
                 .keyBy(tuple -> tuple.f0)
@@ -88,6 +82,13 @@ public class ProcessTempSensor {
                 "FROM temp_sensor " +
                 "GROUP BY dt, TUMBLE(ts, INTERVAL '1' DAY)");
         DataStream<Tuple2<Boolean, Row>> avgTempReportStream = tEnv.toRetractStream(avgTempReport, Row.class);
+
+        StreamingFileSink<String> avgTempSink =
+                StreamingFileSink.forRowFormat(new Path("output/temp/avg"),
+                        new SimpleStringEncoder<String>("UTF-8"))
+                        .withBucketAssigner(new DateTimeBucketAssigner<>())
+                        .build();
+
         avgTempReportStream
                 .map(new MapFunction<Tuple2<Boolean, Row>, String>() {
                     @Override
