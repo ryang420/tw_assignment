@@ -56,7 +56,7 @@ public class OilQualitySensorSource implements SourceFunction<OilQualitySensor> 
                     Double.parseDouble(itemStrArr[4].replaceAll("[^\\d^\\.]+","")));
 
             // 输入文件中的时间戳是从小到大排列的
-            // 新读入的行如果比上一行大，sleep，这样来模拟一个有时间间隔的输入流
+            // 新读入的行如果比上一行大，则等待，这样来模拟一个有时间间隔的输入流
             timeDiff = eventTs - lastEventTs;
             if (timeDiff > 0) {
                 Thread.sleep(timeDiff);
