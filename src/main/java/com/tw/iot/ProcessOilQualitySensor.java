@@ -67,7 +67,7 @@ public class ProcessOilQualitySensor {
         private ValueState<OilQualitySensor> firstValue;
         private ValueState<OilQualitySensor> secondValue;
 
-        private OilQualityuAlert(String item) {
+        public OilQualityuAlert(String item) {
             this.item = item;
         }
 
