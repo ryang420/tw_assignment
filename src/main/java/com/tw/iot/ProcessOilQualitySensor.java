@@ -61,6 +61,9 @@ public class ProcessOilQualitySensor {
         env.execute("Oil Quality Stream");
     }
 
+    /**
+     *
+     */
     public static class OilQualityuAlert extends KeyedProcessFunction<String, OilQualitySensor, String> {
         private String item;
         // 记录前2次酸度值
@@ -80,6 +83,16 @@ public class ProcessOilQualitySensor {
                     new ValueStateDescriptor<>("secondValue", OilQualitySensor.class));
         }
 
+        /**
+         *
+         * @param oilQualitySensor
+         * @param context
+         * @param collector
+         * @throws Exception
+         * 输入： oilQualitySensor POJO
+         * 输出：String
+         * description： 逐行比较油品指标值，first代表上上次的指标值，second代表上一次的指标值。
+         */
         @Override
         public void processElement(OilQualitySensor oilQualitySensor, Context context, Collector<String> collector) throws Exception {
             OilQualitySensor first = firstValue.value();
